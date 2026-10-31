@@ -50,10 +50,17 @@ void Clear(Node* node)
 ## AVLSet ADT
 Member Variable
 ```cpp
-
+AVLTree tree_;
 ```
 Member Function
 ```cpp
-
+int Find(int key) const
+int Insert(int key)
+bool Empty() const
+int Size() const
+int Minimum(int key, int* min_key) const
+int Maximum(int key, int* max_key) const
+int Rank(int key, int* rank) const
+int Erase(int key)
 ```
 ---
