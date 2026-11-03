@@ -1,0 +1,47 @@
+# 바탕 스타일: Google C++ Style Guide
+BasedOnStyle: Google
+Language: Cpp
+Standard: c++17
+
+# 1. 들여쓰기 및 탭 설정
+IndentWidth: 2                              # 기본 2칸 들여쓰기 간격
+TabWidth: 2                                 # 탭 2칸 간격
+UseTab: Never                               # '\w' 사용 금지
+AccessModifierOffset: -1                    # 접근 제어자 1칸 들여쓰기
+
+# 2. 한 줄 최대 길이 제한
+ColumnLimit: 80                             # 초과 시 자동 줄 바꿈
+
+# 3. 중괄호 스타일
+BreakBeforeBraces: Attach                   # 중괄호를 줄을 바꾸지 않고 시작
+
+# 4. 포인터 및 참조 정렬
+PointerAlignment: Left                      # 포인터/참조 기호는 왼쪽
+
+# 5. 네임스페이스 들여쓰기 안 함
+NamespaceIndentation: None                  # namespace 안쪽 코드는 들여쓰기 금지
+
+# 6. 한 줄짜리 구문 (if, loop, function)
+AllowShortFunctionsOnASingleLine: Inline    # 인라인 짧은 함수 한 줄 표기 허용
+AllowShortIfStatementsOnASingleLine: Never  # 조건문 한 줄 표기 금지
+AllowShortLoopsOnASingleLine: false         # 반복문 한 줄 표기 금지
+
+# 7. 공백 처리 규칙
+SpaceBeforeAssignmentOperators: true        # 대입 연산자 앞뒤에 공백
+SpaceBeforeParens: ControlStatements        # 제어문 뒤에 소괄호 전 공백
+SpaceInEmptyParentheses: false              # 빈 괄호 안쪽 공백 금지
+SpacesInParentheses: false                  # 소괄호 안쪽 양끝 공백 금지
+SpacesInSquareBrackets: false               # 대괄호 안쪽 양끝 공백 금지
+
+# 8. include 헤더 정렬 규칙
+SortIncludes: CaseSensitive                 # 정렬 시 대소문자 구분
+IncludeBlocks: Regroup                      # include 사이의 빈 줄을 정돈하고 그룹대로 재배치
+IncludeCategories:
+  - Regex: '^"([^-/]+(\-[^/]+)*)/'          # 구현 대상 메인 헤더
+    Priority: 1
+  - Regex: '^<.*\.h>'                       # C 시스템 헤더          
+    Priority: 2
+  - Regex: '^<.*>'                          # C++ 시스템 헤더
+    Priority: 3
+  - Regex: '.*'                             # 현재 프로젝트의 일반 헤더
+    Priority: 4
