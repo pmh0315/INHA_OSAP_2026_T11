@@ -27,7 +27,7 @@
 
 using namespace std;
 
-explicit Node::Node(int key)
+Node::Node(int key)
     : key_(key),
       height_(1),
       subtree_size_(1),
