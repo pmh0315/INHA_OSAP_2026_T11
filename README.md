@@ -12,12 +12,12 @@ Node* right_node_
 Member Function
 ```cpp
 explicit Node(int key)
-int get_key()
-int get_height()
-int get_subtree_size()
-Node* get_parent_node()
-Node* get_left_node()
-Node* get_right_node()
+int get_key() const
+int get_height() const
+int get_subtree_size() const
+Node* get_parent_node() const
+Node* get_left_node() const
+Node* get_right_node() const
 void set_key(int key)
 void set_height(int height)
 void set_subtree_size(int subtree_size)
