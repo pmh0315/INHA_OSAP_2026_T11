@@ -58,3 +58,27 @@ Node* Node::get_left_node() const {
 Node* Node::get_right_node() const {
   return right_node_;
 }
+
+void Node::set_key(int key) {
+  key_ = key;
+}
+
+void Node::set_height(int height) {
+  height_ = height;
+}
+
+void Node::set_subtree_size(int subtree_size) {
+  subtree_size_ = subtree_size;
+}
+
+void Node::set_parent_node(Node* parent_node) {
+  parent_node_ = parent_node;
+}
+
+void Node::set_left_node(Node* left_node) {
+  left_node_ = left_node;
+}
+
+void Node::set_right_node(Node* right_node) {
+  right_node_ = right_node;
+}
