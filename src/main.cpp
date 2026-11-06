@@ -34,7 +34,7 @@ int main() {
   std::cout.tie(nullptr);
 
   int num_of_tests = 0;
-  std::cin << num_of_tests;
+  std::cin >> num_of_tests;
 
   while (num_of_tests--) {
     int num_of_questions = 0;
@@ -47,33 +47,52 @@ int main() {
       std::cin >> command;
 
       if (command == "Insert") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.insert(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        std::cout << avl_set.Insert(key) << "\n";
       } else if (command == "Find") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.find(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        std::cout << avl_set.Find(key) << "\n";
       } else if (command == "Empty") {
-        std::cout << (avl_set.Empty()) ? "1" : "0" << "\n";
+        std::cout << ((avl_set.Empty()) ? "1" : "0") << "\n";
       } else if (command == "Size") {
-        std::cout << avl_set.size() << "\n";
+        std::cout << avl_set.Size() << "\n";
       } else if (command == "Minimum") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.minimum(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        int min_key;
+        int min_depth = avl_set.Minimum(key, &min_key);
+
+        std::cout << min_key << " " << min_depth << "\n";
       } else if (command == "Maximum") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.maximum(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        int max_key;
+        int max_depth = avl_set.Maximum(key, &max_key);
+
+        std::cout << max_key << " " << max_depth << "\n";
       } else if (command == "Rank") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.rank(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        int rank;
+        int depth = avl_set.Rank(key, &rank);
+
+        if (depth == -1) {
+          std::cout << "-1\n";
+        } else {
+          std::cout << depth << " " << rank << "\n";
+        }
       } else if (command == "Erase") {
-        int x;
-        std::cin >> x;
-        std::cout << avl_set.erase(x) << "\n";
+        int key;
+        std::cin >> key;
+
+        std::cout << avl_set.Erase(key) << "\n";
       }
     }
   }
