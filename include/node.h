@@ -30,19 +30,19 @@ class Node {
  public:
   explicit Node(int key);
 
-  int get_key() const;
-  int get_height() const;
-  int get_subtree_size() const;
-  Node* get_parent_node() const;
-  Node* get_left_node() const;
-  Node* get_right_node() const;
+  int get_key() const { return key_; }
+  int get_height() const { return height_; }
+  int get_subtree_size() const { return subtree_size_; }
+  Node* get_parent_node() const { return parent_node_; }
+  Node* get_left_node() const { return left_node_; }
+  Node* get_right_node() const { return right_node_; }
 
-  void set_key(int key);
-  void set_height(int height);
-  void set_subtree_size(int subtree_size);
-  void set_parent_node(Node* parent_node);
-  void set_left_node(Node* left_node);
-  void set_right_node(Node* right_node);
+  void set_key(int key) { key_ = key; }
+  void set_height(int height) { height_ = height; }
+  void set_subtree_size(int subtree_size) { subtree_size_ = subtree_size; }
+  void set_parent_node(Node* parent_node) { parent_node_ = parent_node; }
+  void set_left_node(Node* left_node) { left_node_ = left_node; }
+  void set_right_node(Node* right_node) { right_node_ = right_node; }
 
  private:
   int key_;
