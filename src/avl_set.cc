@@ -25,6 +25,8 @@
 
 #include "avl_set.h"
 
+#include "node.h"
+
 int AVLSet::Find(int key) const {
   Node* node = tree_.FindNode(key);
   if (node == nullptr) {
@@ -44,3 +46,27 @@ int AVLSet::Insert(int key) {
 bool AVLSet::Empty() const { return tree_.Empty(); }
 
 int AVLSet::Size() const { return tree_.Size(); }
+
+int AVLSet::Minimum(int key, int* min_key) const {
+  Node* node = tree_.FindNode(key);
+  if (node == nullptr) {
+    return -1;
+  }
+  while (node->get_left_node() != nullptr) {
+    node = node->get_left_node();
+  }
+  *min_key = node->get_key();
+  return tree_.GetDepth(node);
+}
+
+int AVLSet::Maximum(int key, int* max_key) const {
+  Node* node = tree_.FindNode(key);
+  if (node == nullptr) {
+    return -1;
+  }
+  while (node->get_right_node() != nullptr) {
+    node = node->get_right_node();
+  }
+  *max_key = node->get_key();
+  return tree_.GetDepth(node);
+}
