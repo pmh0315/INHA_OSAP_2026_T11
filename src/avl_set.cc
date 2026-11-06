@@ -90,3 +90,13 @@ int AVLSet::Rank(int key, int* rank) const {
   *rank = num_smaller + 1;
   return tree_.GetDepth(node);
 }
+
+int AVLSet::Erase(int key) {
+  Node* node = tree_.FindNode(key);
+  if (node == nullptr) {
+    return -1;
+  }
+  int depth = tree_.GetDepth(node);
+  tree_.RemoveNode(node);
+  return depth;
+}
