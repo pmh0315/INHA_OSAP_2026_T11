@@ -24,7 +24,7 @@
 // GitHubId: Zutomaro1411
 // Date: 2026-10-30
 
-#ifndef AVLSET_INCLUDE_AVL_TREE_H_  
+#ifndef AVLSET_INCLUDE_AVL_TREE_H_
 #define AVLSET_INCLUDE_AVL_TREE_H_
 
 #include "node.h"
@@ -34,16 +34,25 @@ class AVLTree {
   AVLTree();
   ~AVLTree();
 
-  Node* FindNode(Node* node, int key) const; 
-  Node* FindNode(int key) const; 
-  Node* InsertNode(int key);     
-  bool Empty() const;       
+  Node* FindNode(Node* node, int key) const;
+  Node* FindNode(int key) const;
+  Node* InsertNode(int key);
+  bool Empty() const;
   int Size() const;
   int GetDepth(Node* node) const;
   void RemoveNode(Node* node);
 
+  // node의 height, subtree_size 값 업데이트
+  void UpdateNode(Node* node);
+  // node의 left_node와 right_node의 height 차이 리턴
+  int GetBalanceFactor(Node* node);
+  Node* RotateLeft(Node* z);
+  Node* RotateRight(Node* z);
+  // 리밸런싱이 필요 시 상황에 맞게 수행
+  void Rebalance(Node* node);
+
  private:
-  Node* GetSuccessor(Node* node) const;       
+  Node* GetSuccessor(Node* node) const;
   void Clear(Node* node);
 
   Node* root_;
