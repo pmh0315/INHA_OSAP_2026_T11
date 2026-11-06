@@ -70,3 +70,23 @@ int AVLSet::Maximum(int key, int* max_key) const {
   *max_key = node->get_key();
   return tree_.GetDepth(node);
 }
+
+int AVLSet::Rank(int key, int* rank) const {
+  Node* node = tree_.FindNode(key);
+  if (node == nullptr) {
+    return -1;
+  }
+  Node* left = node->get_left_node();
+  int num_smaller = (left == nullptr) ? 0 : left->get_subtree_size();
+  Node* child = node;
+  Node* parent = node->get_parent_node();
+  while (parent != nullptr) {
+    if (parent->get_right_node() == child) {
+      num_smaller += parent->get_subtree_size() - child->get_subtree_size();
+    }
+    child = parent;
+    parent = parent->get_parent_node();
+  }
+  *rank = num_smaller + 1;
+  return tree_.GetDepth(node);
+}
