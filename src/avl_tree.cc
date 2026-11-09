@@ -25,6 +25,8 @@
 
 #include "include/avl_tree.h"
 
+#include <algorithm>
+
 AVLTree::AVLTree() : root_(nullptr), size_(0) {}
 
 // Clear함수 호출로 모든 노드의 동적 할당 해제
@@ -102,6 +104,38 @@ bool AVLTree::Empty() const {
 
 int AVLTree::Size() const {
   return size_;
+}
+
+void AVLTree::UpdateNode(Node* node) {
+  if (node == nullptr) {
+    return;
+  }
+
+  Node* left_node = node->get_left_node();
+  int left_node_height;
+  int left_node_subtree_size;
+  if (left_node != nullptr) {
+    left_node_height = left_node->get_height();
+    left_node_subtree_size = left_node->get_subtree_size();
+  } else {
+    left_node_height = 0;
+    left_node_subtree_size = 0;
+  }
+
+  Node* right_node = node->get_right_node();
+  int right_node_height;
+  int right_node_subtree_size;
+  if (right_node != nullptr) {
+    right_node_height = right_node->get_height();
+    right_node_subtree_size = right_node->get_subtree_size();
+  } else {
+    right_node_height = 0;
+    right_node_subtree_size = 0;
+  }
+
+  int child_max_height = std::max(left_node_height, right_node_height);
+  node->set_height(child_max_height + 1);
+  node->set_subtree_size(left_node_subtree_size + right_node_subtree_size + 1);
 }
 
 int AVLTree::GetBalanceFactor(Node* node) const {
