@@ -104,6 +104,72 @@ int AVLTree::Size() const {
   return size_;
 }
 
+Node* AVLTree::RotateLeft(Node* z) {
+  if (z == nullptr) {
+    return nullptr;
+  }
+
+  Node* y = z->get_right_node();
+  if (y == nullptr) {
+    return nullptr;
+  }
+
+  Node* parent_node = z->get_parent_node();
+  if (parent_node == nullptr) {
+    root_ = y;
+  } else if (parent_node->get_left_node() == z) {
+    parent_node->set_left_node(y);
+  } else {  // parent_node->get_right_node() == z
+    parent_node->set_right_node(y);
+  }
+
+  Node* y_left_node = y->get_left_node();
+  if (y_left_node != nullptr) {
+    y_left_node->set_parent_node(z);
+  }
+  z->set_parent_node(y);
+  z->set_right_node(y_left_node);
+  y->set_parent_node(parent_node);
+  y->set_left_node(z);
+
+  // 수정된 노드 업데이트 코드 추가하기
+
+  return y;
+}
+
+Node* AVLTree::RotateRight(Node* z) {
+  if (z == nullptr) {
+    return nullptr;
+  }
+
+  Node* y = z->get_left_node();
+  if (y == nullptr) {
+    return nullptr;
+  }
+
+  Node* parent_node = z->get_parent_node();
+  if (parent_node == nullptr) {
+    root_ = y;
+  } else if (parent_node->get_left_node() == z) {
+    parent_node->set_left_node(y);
+  } else {  // parent_node->get_right_node() == z
+    parent_node->set_right_node(y);
+  }
+
+  Node* y_right_node = y->get_right_node();
+  if (y_right_node != nullptr) {
+    y_right_node->set_parent_node(z);
+  }
+  z->set_parent_node(y);
+  z->set_left_node(y_right_node);
+  y->set_parent_node(parent_node);
+  y->set_right_node(z);
+
+  // 수정된 노드 업데이트 코드 추가하기
+
+  return y;
+}
+
 void AVLTree::Clear(Node* node) {
   if (node == nullptr) {
     return;
