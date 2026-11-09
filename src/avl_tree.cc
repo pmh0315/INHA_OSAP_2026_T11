@@ -181,7 +181,9 @@ Node* AVLTree::RotateLeft(Node* z) {
   y->set_parent_node(parent_node);
   y->set_left_node(z);
 
-  // 수정된 노드 업데이트 코드 추가하기
+  // 아래 노드부터 업데이트
+  UpdateNode(z);
+  UpdateNode(y);
 
   return y;
 }
@@ -214,9 +216,46 @@ Node* AVLTree::RotateRight(Node* z) {
   y->set_parent_node(parent_node);
   y->set_right_node(z);
 
-  // 수정된 노드 업데이트 코드 추가하기
+  // 아래 노드부터 업데이트
+  UpdateNode(z);
+  UpdateNode(y);
 
   return y;
+}
+
+void AVLTree::Rebalance(Node* z) {
+  if (z == nullptr) {
+    return;
+  }
+
+  UpdateNode(z);
+
+  int balance_factor = GetBalanceFactor(z);
+  if (balance_factor >= 2) {
+    Node* y = z->get_left_node();
+    if (y == nullptr) {
+      return;
+    }
+
+    if (GetBalanceFactor(y) >= 0) {
+      RotateRight(z);
+    } else {
+      RotateLeft(y);
+      RotateRight(z);
+    }
+  } else if (balance_factor <= -2) {
+    Node* y = z->get_right_node();
+    if (y == nullptr) {
+      return;
+    }
+
+    if (GetBalanceFactor(y) <= 0) {
+      RotateLeft(z);
+    } else {
+      RotateRight(y);
+      RotateLeft(z);
+    }
+  }
 }
 
 void AVLTree::Clear(Node* node) {

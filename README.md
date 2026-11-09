@@ -47,7 +47,7 @@ void UpdateNode(Node* node)
 int GetBalanceFactor(Node* node) const
 Node* RotateLeft(Node* z)
 Node* RotateRight(Node* z)
-void Rebalance(Node* node)
+void Rebalance(Node* z)
 Node* GetSuccessor(Node* node) const
 void Clear(Node* node)
 ```

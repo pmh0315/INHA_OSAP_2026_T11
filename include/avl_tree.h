@@ -49,7 +49,7 @@ class AVLTree {
   Node* RotateLeft(Node* z);
   Node* RotateRight(Node* z);
   // 리밸런싱이 필요 시 상황에 맞게 수행
-  void Rebalance(Node* node);
+  void Rebalance(Node* z);
 
  private:
   Node* GetSuccessor(Node* node) const;
