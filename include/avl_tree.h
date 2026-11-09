@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// Author: 마승우
-// GitHubId: Zutomaro1411
+// Author: 마승우, 박민혁
+// GitHubId: Zutomaro1411, choco103-dev
 // Date: 2026-10-30
 
 #ifndef AVLSET_INCLUDE_AVL_TREE_H_
@@ -59,4 +59,4 @@ class AVLTree {
   int size_;
 };
 
-#endif
+#endif  // AVLSET_INCLUDE_AVL_TREE_H_
