@@ -104,6 +104,21 @@ int AVLTree::Size() const {
   return size_;
 }
 
+int AVLTree::GetBalanceFactor(Node* node) const {
+  if (node == nullptr) {
+    return 0;
+  }
+
+  Node* left_node = node->get_left_node();
+  int left_node_height = (left_node != nullptr) ? left_node->get_height() : 0;
+
+  Node* right_node = node->get_right_node();
+  int right_node_height =
+      (right_node != nullptr) ? right_node->get_height() : 0;
+
+  return left_node_height - right_node_height;
+}
+
 Node* AVLTree::RotateLeft(Node* z) {
   if (z == nullptr) {
     return nullptr;

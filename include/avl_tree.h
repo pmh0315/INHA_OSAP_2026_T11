@@ -45,7 +45,7 @@ class AVLTree {
   // node의 height, subtree_size 값 업데이트
   void UpdateNode(Node* node);
   // node의 left_node와 right_node의 height 차이 리턴
-  int GetBalanceFactor(Node* node);
+  int GetBalanceFactor(Node* node) const;
   Node* RotateLeft(Node* z);
   Node* RotateRight(Node* z);
   // 리밸런싱이 필요 시 상황에 맞게 수행
