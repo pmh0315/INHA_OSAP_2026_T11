@@ -94,7 +94,14 @@ Node* AVLTree::InsertNode(int key) {
   }
 
   size_++;
-  // Rebalance();  리밸런싱 함수 구현한 뒤 수정 필요함
+
+  // 상향식 Rebalancing
+  while (par_node != nullptr) {
+    Node* new_par_node = par_node->get_parent_node();
+    Rebalance(par_node);
+    par_node = new_par_node;
+  }
+
   return new_node;
 }
 
@@ -166,7 +173,7 @@ Node* AVLTree::RotateLeft(Node* z) {
   y->set_parent_node(parent_node);
   y->set_left_node(z);
 
-  // 아래 노드부터 업데이트
+  // 아래 노드부터 Update
   UpdateNode(z);
   UpdateNode(y);
 
@@ -201,7 +208,7 @@ Node* AVLTree::RotateRight(Node* z) {
   y->set_parent_node(parent_node);
   y->set_right_node(z);
 
-  // 아래 노드부터 업데이트
+  // 아래 노드부터 Update
   UpdateNode(z);
   UpdateNode(y);
 
