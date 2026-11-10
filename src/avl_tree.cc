@@ -112,26 +112,12 @@ void AVLTree::UpdateNode(Node* node) {
   }
 
   Node* left_node = node->get_left_node();
-  int left_node_height;
-  int left_node_subtree_size;
-  if (left_node != nullptr) {
-    left_node_height = left_node->get_height();
-    left_node_subtree_size = left_node->get_subtree_size();
-  } else {
-    left_node_height = 0;
-    left_node_subtree_size = 0;
-  }
+  int left_node_height = GetNodeHeight(left_node);
+  int left_node_subtree_size = GetNodeSubtreeSize(left_node);
 
   Node* right_node = node->get_right_node();
-  int right_node_height;
-  int right_node_subtree_size;
-  if (right_node != nullptr) {
-    right_node_height = right_node->get_height();
-    right_node_subtree_size = right_node->get_subtree_size();
-  } else {
-    right_node_height = 0;
-    right_node_subtree_size = 0;
-  }
+  int right_node_height = GetNodeHeight(right_node);
+  int right_node_subtree_size = GetNodeSubtreeSize(right_node);
 
   int child_max_height = std::max(left_node_height, right_node_height);
   node->set_height(child_max_height + 1);
@@ -144,11 +130,10 @@ int AVLTree::GetBalanceFactor(Node* node) const {
   }
 
   Node* left_node = node->get_left_node();
-  int left_node_height = (left_node != nullptr) ? left_node->get_height() : 0;
+  int left_node_height = GetNodeHeight(left_node);
 
   Node* right_node = node->get_right_node();
-  int right_node_height =
-      (right_node != nullptr) ? right_node->get_height() : 0;
+  int right_node_height = GetNodeHeight(right_node);
 
   return left_node_height - right_node_height;
 }
@@ -256,6 +241,14 @@ void AVLTree::Rebalance(Node* z) {
       RotateLeft(z);
     }
   }
+}
+
+int AVLTree::GetNodeHeight(Node* node) const {
+  return (node != nullptr) ? node->get_height() : 0;
+}
+
+int AVLTree::GetNodeSubtreeSize(Node* node) const {
+  return (node != nullptr) ? node->get_subtree_size() : 0;
 }
 
 void AVLTree::Clear(Node* node) {

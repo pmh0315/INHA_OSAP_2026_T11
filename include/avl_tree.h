@@ -53,6 +53,8 @@ class AVLTree {
 
  private:
   Node* GetSuccessor(Node* node) const;
+  int GetNodeHeight(Node* node) const;
+  int GetNodeSubtreeSize(Node* node) const;
   void Clear(Node* node);
 
   Node* root_;
