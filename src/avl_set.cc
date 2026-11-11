@@ -47,7 +47,7 @@ bool AVLSet::Empty() const { return tree_.Empty(); }
 
 int AVLSet::Size() const { return tree_.Size(); }
 
-int AVLSet::Minimum(int key, int* min_key) const {
+int AVLSet::Minimum(int key, int* depth) const {
   Node* node = tree_.FindNode(key);
   if (node == nullptr) {
     return -1;
@@ -55,11 +55,11 @@ int AVLSet::Minimum(int key, int* min_key) const {
   while (node->get_left_node() != nullptr) {
     node = node->get_left_node();
   }
-  *min_key = node->get_key();
-  return tree_.GetDepth(node);
+  *depth = tree_.GetDepth(node);
+  return node->get_key();
 }
 
-int AVLSet::Maximum(int key, int* max_key) const {
+int AVLSet::Maximum(int key, int* depth) const {
   Node* node = tree_.FindNode(key);
   if (node == nullptr) {
     return -1;
@@ -67,11 +67,11 @@ int AVLSet::Maximum(int key, int* max_key) const {
   while (node->get_right_node() != nullptr) {
     node = node->get_right_node();
   }
-  *max_key = node->get_key();
-  return tree_.GetDepth(node);
+  *depth = tree_.GetDepth(node);
+  return node->get_key();
 }
 
-int AVLSet::Rank(int key, int* rank) const {
+int AVLSet::Rank(int key, int* depth) const {
   Node* node = tree_.FindNode(key);
   if (node == nullptr) {
     return -1;
@@ -87,8 +87,8 @@ int AVLSet::Rank(int key, int* rank) const {
     child = parent;
     parent = parent->get_parent_node();
   }
-  *rank = num_smaller + 1;
-  return tree_.GetDepth(node);
+  *depth = tree_.GetDepth(node);
+  return num_smaller + 1;
 }
 
 int AVLSet::Erase(int key) {
