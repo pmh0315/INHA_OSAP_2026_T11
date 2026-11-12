@@ -58,9 +58,9 @@ int Find(int key) const
 int Insert(int key)
 bool Empty() const
 int Size() const
-int Minimum(int key, int* min_key) const
-int Maximum(int key, int* max_key) const
-int Rank(int key, int* rank) const
+int Minimum(int key, int* depth) const
+int Maximum(int key, int* depth) const
+int Rank(int key, int* depth) const
 int Erase(int key)
 ```
 ---
