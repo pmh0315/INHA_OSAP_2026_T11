@@ -20,22 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// Author: 마승우
+// Author: 마승우, 박민혁
 // Date: 2026-11-06
 
-
 #include "include/avl_tree.h"
+
+#include <algorithm>
 
 AVLTree::AVLTree() : root_(nullptr), size_(0) {}
 
 // Clear함수 호출로 모든 노드의 동적 할당 해제
-AVLTree::~AVLTree() {  
+AVLTree::~AVLTree() {
   Clear(root_);
 }
 
 Node* AVLTree::FindNode(Node* node, int key) const {
   Node* cur_node = node;
-  while (cur_node != nullptr) { 
+  while (cur_node != nullptr) {
     if (key == cur_node->get_key()) {
       // 키를 찾으면 리턴
       return cur_node;
@@ -50,13 +51,13 @@ Node* AVLTree::FindNode(Node* node, int key) const {
   return nullptr;
 }
 // 루트를 고정으로 FindNode함수를 실행하는 함수
-Node* AVLTree::FindNode(int key) const {  
+Node* AVLTree::FindNode(int key) const {
   return FindNode(root_, key);
 }
 
 Node* AVLTree::InsertNode(int key) {
   // 루트가 비어있으면(트리가 존재하지 않으면) 새로운 노드로 생성후 루트 설정
-  if (root_ == nullptr) {  
+  if (root_ == nullptr) {
     root_ = new Node(key);
     size_++;
     return root_;
@@ -64,45 +65,201 @@ Node* AVLTree::InsertNode(int key) {
 
   Node* cur_node = root_;
   Node* par_node = nullptr;
-  while (cur_node != nullptr) {  
+  while (cur_node != nullptr) {
     par_node = cur_node;
-    if (key < cur_node->get_key()) {  
-      // 삽입 할 키 값이 현재 노드의 키 값보다 작으면 현재 노드를 left 노드로 변경
+    if (key < cur_node->get_key()) {
+      // 삽입 할 키 값이 현재 노드의 키 값보다 작으면 현재 노드를 left 노드로
+      // 변경
       cur_node = cur_node->get_left_node();
-    } else if (key > cur_node->get_key()) {  
-      // 삽입 할 키 값이 현재 노드의 키 값보다 크면 현재 노드를 right 노드로 변경
+    } else if (key > cur_node->get_key()) {
+      // 삽입 할 키 값이 현재 노드의 키 값보다 크면 현재 노드를 right 노드로
+      // 변경
       cur_node = cur_node->get_right_node();
     } else {
       // 키가 중복된 경우는 삽입 안 함
-      return nullptr;  
+      return nullptr;
     }
   }
 
-  Node* new_node = new Node(key);  
-  new_node->set_parent_node(par_node); 
-  if (key < par_node->get_key()) {  
-    // 새로운 노드 키 값이 부모 노드의 키 값보다 작으면 새로운 노드를 왼쪽 자식으로 설정
+  Node* new_node = new Node(key);
+  new_node->set_parent_node(par_node);
+  if (key < par_node->get_key()) {
+    // 새로운 노드 키 값이 부모 노드의 키 값보다 작으면 새로운 노드를 왼쪽
+    // 자식으로 설정
     par_node->set_left_node(new_node);
-  } else {  
-    // 새로운 노드 키 값이 부모 노드의 키 값보다 크면 새로운 노드를 오른쪽 자식으로 설정
+  } else {
+    // 새로운 노드 키 값이 부모 노드의 키 값보다 크면 새로운 노드를 오른쪽
+    // 자식으로 설정
     par_node->set_right_node(new_node);
   }
 
   size_++;
-  // Rebalance();  리밸런싱 함수 구현한 뒤 수정 필요함
+
+  // 상향식 Rebalancing
+  while (par_node != nullptr) {
+    Node* new_par_node = par_node->get_parent_node();
+    Rebalance(par_node);
+    par_node = new_par_node;
+  }
+
   return new_node;
 }
 
 bool AVLTree::Empty() const {
-  return size_ == 0;  
+  return size_ == 0;
 }
 
 int AVLTree::Size() const {
-  return size_;  
+  return size_;
+}
+
+void AVLTree::UpdateNode(Node* node) {
+  if (node == nullptr) {
+    return;
+  }
+
+  Node* left_node = node->get_left_node();
+  int left_node_height = GetNodeHeight(left_node);
+  int left_node_subtree_size = GetNodeSubtreeSize(left_node);
+
+  Node* right_node = node->get_right_node();
+  int right_node_height = GetNodeHeight(right_node);
+  int right_node_subtree_size = GetNodeSubtreeSize(right_node);
+
+  int child_max_height = std::max(left_node_height, right_node_height);
+  node->set_height(child_max_height + 1);
+  node->set_subtree_size(left_node_subtree_size + right_node_subtree_size + 1);
+}
+
+int AVLTree::GetBalanceFactor(Node* node) const {
+  if (node == nullptr) {
+    return 0;
+  }
+
+  Node* left_node = node->get_left_node();
+  int left_node_height = GetNodeHeight(left_node);
+
+  Node* right_node = node->get_right_node();
+  int right_node_height = GetNodeHeight(right_node);
+
+  return left_node_height - right_node_height;
+}
+
+Node* AVLTree::RotateLeft(Node* z) {
+  if (z == nullptr) {
+    return nullptr;
+  }
+
+  Node* y = z->get_right_node();
+  if (y == nullptr) {
+    return nullptr;
+  }
+
+  Node* parent_node = z->get_parent_node();
+  if (parent_node == nullptr) {
+    root_ = y;
+  } else if (parent_node->get_left_node() == z) {
+    parent_node->set_left_node(y);
+  } else {  // parent_node->get_right_node() == z
+    parent_node->set_right_node(y);
+  }
+
+  Node* y_left_node = y->get_left_node();
+  if (y_left_node != nullptr) {
+    y_left_node->set_parent_node(z);
+  }
+  z->set_parent_node(y);
+  z->set_right_node(y_left_node);
+  y->set_parent_node(parent_node);
+  y->set_left_node(z);
+
+  // 아래 노드부터 Update
+  UpdateNode(z);
+  UpdateNode(y);
+
+  return y;
+}
+
+Node* AVLTree::RotateRight(Node* z) {
+  if (z == nullptr) {
+    return nullptr;
+  }
+
+  Node* y = z->get_left_node();
+  if (y == nullptr) {
+    return nullptr;
+  }
+
+  Node* parent_node = z->get_parent_node();
+  if (parent_node == nullptr) {
+    root_ = y;
+  } else if (parent_node->get_left_node() == z) {
+    parent_node->set_left_node(y);
+  } else {  // parent_node->get_right_node() == z
+    parent_node->set_right_node(y);
+  }
+
+  Node* y_right_node = y->get_right_node();
+  if (y_right_node != nullptr) {
+    y_right_node->set_parent_node(z);
+  }
+  z->set_parent_node(y);
+  z->set_left_node(y_right_node);
+  y->set_parent_node(parent_node);
+  y->set_right_node(z);
+
+  // 아래 노드부터 Update
+  UpdateNode(z);
+  UpdateNode(y);
+
+  return y;
+}
+
+void AVLTree::Rebalance(Node* z) {
+  if (z == nullptr) {
+    return;
+  }
+
+  UpdateNode(z);
+
+  int balance_factor = GetBalanceFactor(z);
+  if (balance_factor >= 2) {
+    Node* y = z->get_left_node();
+    if (y == nullptr) {
+      return;
+    }
+
+    if (GetBalanceFactor(y) >= 0) {
+      RotateRight(z);
+    } else {
+      RotateLeft(y);
+      RotateRight(z);
+    }
+  } else if (balance_factor <= -2) {
+    Node* y = z->get_right_node();
+    if (y == nullptr) {
+      return;
+    }
+
+    if (GetBalanceFactor(y) <= 0) {
+      RotateLeft(z);
+    } else {
+      RotateRight(y);
+      RotateLeft(z);
+    }
+  }
+}
+
+int AVLTree::GetNodeHeight(Node* node) const {
+  return (node != nullptr) ? node->get_height() : 0;
+}
+
+int AVLTree::GetNodeSubtreeSize(Node* node) const {
+  return (node != nullptr) ? node->get_subtree_size() : 0;
 }
 
 void AVLTree::Clear(Node* node) {
-  if (node == nullptr) {  
+  if (node == nullptr) {
     return;
   }
 
