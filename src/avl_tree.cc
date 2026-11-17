@@ -130,6 +130,50 @@ int AVLTree::GetDepth(Node* node) const {
   return depth;
 }
 
+Node* AVLTree::GetMinimum(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  while (node->get_left_node() != nullptr) {
+    node = node->get_left_node();
+  }
+
+  return node;
+}
+
+Node* AVLTree::GetMaximum(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  while (node->get_right_node() != nullptr) {
+    node = node->get_right_node();
+  }
+
+  return node;
+}
+
+int AVLTree::GetRank(Node* node) const {
+  if (node == nullptr) {
+    return -1;
+  }
+
+  Node* left_node = node->get_left_node();
+  int num_smaller = (left_node == nullptr) ? 0 : left_node->get_subtree_size();
+  Node* child = node;
+  Node* par_node = node->get_parent_node();
+  while (par_node != nullptr) {
+    if (par_node->get_right_node() == child) {
+      num_smaller += par_node->get_subtree_size() - child->get_subtree_size();
+    }
+    child = par_node;
+    par_node = par_node->get_parent_node();
+  }
+
+  return num_smaller + 1;
+}
+
 void AVLTree::RemoveNode(Node* node) {
   if (node == nullptr) {
     return;
@@ -144,7 +188,7 @@ void AVLTree::RemoveNode(Node* node) {
     node->set_key(successor->get_key());
 
     //실제 삭제와 리밸런싱은 후임자 위치에서 수행하도록 재귀적 호출
-    RemeveNode(successor);
+    RemoveNode(successor);
     return;
   }
 

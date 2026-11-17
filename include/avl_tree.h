@@ -40,6 +40,9 @@ class AVLTree {
   bool Empty() const;
   int Size() const;
   int GetDepth(Node* node) const;
+  Node* GetMinimum(Node* node) const;
+  Node* GetMaximum(Node* node) const;
+  int GetRank(Node* node) const;
   void RemoveNode(Node* node);
 
   // node의 height, subtree_size 값 업데이트
