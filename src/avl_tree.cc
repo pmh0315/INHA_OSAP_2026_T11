@@ -113,7 +113,7 @@ int AVLTree::Size() const {
   return size_;
 }
 
-int GetDepth(Node* node) const {
+int AVLTree::GetDepth(Node* node) const {
   if (node == nullptr) {
     return -1;
   }
@@ -130,7 +130,7 @@ int GetDepth(Node* node) const {
   return depth;
 }
 
-void RemoveNode(Node* node) {
+void AVLTree::RemoveNode(Node* node) {
   if (node == nullptr) {
     return;
   }
@@ -310,6 +310,32 @@ void AVLTree::Rebalance(Node* z) {
       RotateLeft(z);
     }
   }
+}
+
+Node* AVLTree::GetSuccessor(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  // 오른쪽 자식이 있는 경우 오른쪽 서브트리에서 가장 왼쪽 아래로 내려간 노드
+  if (node->get_right_node() != nullptr) {
+    Node* cur_node = node->get_right_node();
+    while (cur_node->get_left_node() != nullptr) {
+      cur_node = cur_node->get_left_node();
+    }
+    return cur_node;
+  }
+
+  // 오른쪽 자식이 없는 경우 부모를 타고 올라가며 자신이 왼쪽 자식인 첫 번째 부모
+  Node* cur_node = node;
+  Node* par_node = cur_node->get_parent_node();
+  
+  while (par_node != nullptr && cur_node == par_node->get_right_node()) {
+    cur_node = par_node;
+    par_node = par_node->get_parent_node();
+  }
+  
+  return par_node;
 }
 
 int AVLTree::GetNodeHeight(Node* node) const {
