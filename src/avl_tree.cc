@@ -130,6 +130,51 @@ int GetDepth(Node* node) const {
   return depth;
 }
 
+void RemoveNode(Node* node) {
+  if (node == nullptr) {
+    return;
+  }
+
+  Node* left_node = node->get_left_node();
+  Node* right_node = node->get_right_node();
+  
+  //자식이 둘 다 존재할 경우 후임자(successor) 사용
+  if (left_node != nullptr && right_node != nullptr) {
+    Node* successor = GetSuccessor(node);
+    node->set_key(successor->get_key());
+
+    //실제 삭제와 리밸런싱은 후임자 위치에서 수행하도록 재귀적 호출
+    RemeveNode(successor);
+    return;
+  }
+
+  Node* par_node = node->get_parent_node();
+  Node* child = (left_node != nullptr) ? left_node : right_node;
+
+  if (child != nullptr) {
+    child->set_parent_node(par_node);
+  }
+
+  if (par_node == nullptr) {
+    // 삭제하는 노드가 트리의 루트였던 경우 루트 변경
+    root_ = child;
+  } else if (par_node->get_left_node() == node) {
+    par_node->set_left_node(child);
+  } else {
+    par_node->set_right_node(child);
+  }
+
+  delete node;
+  size_--;
+
+   // 상향식 Rebalancing
+  while (par_node != nullptr) {
+    Node* new_par_node = par_node->get_parent_node();
+    Rebalance(par_node);
+    par_node = new_par_node;
+  }
+}
+
 void AVLTree::UpdateNode(Node* node) {
   if (node == nullptr) {
     return;
