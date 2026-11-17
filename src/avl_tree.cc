@@ -113,6 +113,23 @@ int AVLTree::Size() const {
   return size_;
 }
 
+int GetDepth(Node* node) const {
+  if (node == nullptr) {
+    return -1;
+  }
+
+  int depth = 0;
+  Node* cur_node = node;
+  
+  // 루트 노드(부모가 nullptr인 노드)에 도달할 때까지 반복
+  while (cur_node->get_parent_node() != nullptr) {
+    depth++;
+    cur_node = cur_node->get_parent_node();
+  }
+  
+  return depth;
+}
+
 void AVLTree::UpdateNode(Node* node) {
   if (node == nullptr) {
     return;
