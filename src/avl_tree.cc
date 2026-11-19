@@ -113,6 +113,112 @@ int AVLTree::Size() const {
   return size_;
 }
 
+int AVLTree::GetDepth(Node* node) const {
+  if (node == nullptr) {
+    return -1;
+  }
+
+  int depth = 0;
+  Node* cur_node = node;
+  
+  // 루트 노드(부모가 nullptr인 노드)에 도달할 때까지 반복
+  while (cur_node->get_parent_node() != nullptr) {
+    depth++;
+    cur_node = cur_node->get_parent_node();
+  }
+  
+  return depth;
+}
+
+Node* AVLTree::GetMinimum(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  while (node->get_left_node() != nullptr) {
+    node = node->get_left_node();
+  }
+
+  return node;
+}
+
+Node* AVLTree::GetMaximum(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  while (node->get_right_node() != nullptr) {
+    node = node->get_right_node();
+  }
+
+  return node;
+}
+
+int AVLTree::GetRank(Node* node) const {
+  if (node == nullptr) {
+    return -1;
+  }
+
+  Node* left_node = node->get_left_node();
+  int num_smaller = (left_node == nullptr) ? 0 : left_node->get_subtree_size();
+  Node* child = node;
+  Node* par_node = node->get_parent_node();
+  while (par_node != nullptr) {
+    if (par_node->get_right_node() == child) {
+      num_smaller += par_node->get_subtree_size() - child->get_subtree_size();
+    }
+    child = par_node;
+    par_node = par_node->get_parent_node();
+  }
+
+  return num_smaller + 1;
+}
+
+void AVLTree::RemoveNode(Node* node) {
+  if (node == nullptr) {
+    return;
+  }
+
+  Node* left_node = node->get_left_node();
+  Node* right_node = node->get_right_node();
+  
+  //자식이 둘 다 존재할 경우 후임자(successor) 사용
+  if (left_node != nullptr && right_node != nullptr) {
+    Node* successor = GetSuccessor(node);
+    node->set_key(successor->get_key());
+
+    //실제 삭제와 리밸런싱은 후임자 위치에서 수행하도록 재귀적 호출
+    RemoveNode(successor);
+    return;
+  }
+
+  Node* par_node = node->get_parent_node();
+  Node* child = (left_node != nullptr) ? left_node : right_node;
+
+  if (child != nullptr) {
+    child->set_parent_node(par_node);
+  }
+
+  if (par_node == nullptr) {
+    // 삭제하는 노드가 트리의 루트였던 경우 루트 변경
+    root_ = child;
+  } else if (par_node->get_left_node() == node) {
+    par_node->set_left_node(child);
+  } else {
+    par_node->set_right_node(child);
+  }
+
+  delete node;
+  size_--;
+
+   // 상향식 Rebalancing
+  while (par_node != nullptr) {
+    Node* new_par_node = par_node->get_parent_node();
+    Rebalance(par_node);
+    par_node = new_par_node;
+  }
+}
+
 void AVLTree::UpdateNode(Node* node) {
   if (node == nullptr) {
     return;
@@ -248,6 +354,32 @@ void AVLTree::Rebalance(Node* z) {
       RotateLeft(z);
     }
   }
+}
+
+Node* AVLTree::GetSuccessor(Node* node) const {
+  if (node == nullptr) {
+    return nullptr;
+  }
+
+  // 오른쪽 자식이 있는 경우 오른쪽 서브트리에서 가장 왼쪽 아래로 내려간 노드
+  if (node->get_right_node() != nullptr) {
+    Node* cur_node = node->get_right_node();
+    while (cur_node->get_left_node() != nullptr) {
+      cur_node = cur_node->get_left_node();
+    }
+    return cur_node;
+  }
+
+  // 오른쪽 자식이 없는 경우 부모를 타고 올라가며 자신이 왼쪽 자식인 첫 번째 부모
+  Node* cur_node = node;
+  Node* par_node = cur_node->get_parent_node();
+  
+  while (par_node != nullptr && cur_node == par_node->get_right_node()) {
+    cur_node = par_node;
+    par_node = par_node->get_parent_node();
+  }
+  
+  return par_node;
 }
 
 int AVLTree::GetNodeHeight(Node* node) const {

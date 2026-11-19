@@ -42,6 +42,9 @@ Node* InsertNode(int key)
 bool Empty() const
 int Size() const
 int GetDepth(Node* node) const
+Node* GetMinimum(Node* node) const
+Node* GetMaximum(Node* node) const
+int GetRank(Node* node) const
 void RemoveNode(Node* node)
 void UpdateNode(Node* node)
 int GetBalanceFactor(Node* node) const
@@ -49,6 +52,8 @@ Node* RotateLeft(Node* z)
 Node* RotateRight(Node* z)
 void Rebalance(Node* z)
 Node* GetSuccessor(Node* node) const
+  int GetNodeHeight(Node* node) const
+  int GetNodeSubtreeSize(Node* node) const
 void Clear(Node* node)
 ```
 ---
