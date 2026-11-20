@@ -52,11 +52,10 @@ int AVLSet::Minimum(int key, int* depth) const {
   if (node == nullptr) {
     return -1;
   }
-  while (node->get_left_node() != nullptr) {
-    node = node->get_left_node();
-  }
-  *depth = tree_.GetDepth(node);
-  return node->get_key();
+
+  Node* min_node = tree_.GetMinimum(node);
+  *depth = tree_.GetDepth(min_node);
+  return min_node->get_key();
 }
 
 int AVLSet::Maximum(int key, int* depth) const {
@@ -64,11 +63,10 @@ int AVLSet::Maximum(int key, int* depth) const {
   if (node == nullptr) {
     return -1;
   }
-  while (node->get_right_node() != nullptr) {
-    node = node->get_right_node();
-  }
-  *depth = tree_.GetDepth(node);
-  return node->get_key();
+
+  Node* max_node = tree_.GetMaximum(node);
+  *depth = tree_.GetDepth(max_node);
+  return max_node->get_key();
 }
 
 int AVLSet::Rank(int key, int* depth) const {
@@ -76,19 +74,9 @@ int AVLSet::Rank(int key, int* depth) const {
   if (node == nullptr) {
     return -1;
   }
-  Node* left = node->get_left_node();
-  int num_smaller = (left == nullptr) ? 0 : left->get_subtree_size();
-  Node* child = node;
-  Node* parent = node->get_parent_node();
-  while (parent != nullptr) {
-    if (parent->get_right_node() == child) {
-      num_smaller += parent->get_subtree_size() - child->get_subtree_size();
-    }
-    child = parent;
-    parent = parent->get_parent_node();
-  }
+
   *depth = tree_.GetDepth(node);
-  return num_smaller + 1;
+  return tree_.GetRank(node);
 }
 
 int AVLSet::Erase(int key) {
