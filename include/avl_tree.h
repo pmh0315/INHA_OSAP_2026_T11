@@ -29,6 +29,12 @@
 
 #include "node.h"
 
+#ifndef DISALLOW_COPY_AND_ASSIGN
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+#endif
+
 class AVLTree {
  public:
   AVLTree();
@@ -62,6 +68,8 @@ class AVLTree {
 
   Node* root_;
   int size_;
+
+  DISALLOW_COPY_AND_ASSIGN(AVLTree);
 };
 
 #endif  // AVLSET_INCLUDE_AVL_TREE_H_
