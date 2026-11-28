@@ -26,7 +26,7 @@
 #include <iostream>
 #include <string>
 
-#include "avl_set.h"
+#include "include/avl_set.h"
 
 int main() {
   std::ios_base::sync_with_stdio(false);
@@ -64,24 +64,24 @@ int main() {
         int key;
         std::cin >> key;
 
-        int min_key;
-        int min_depth = avl_set.Minimum(key, &min_key);
+        int min_depth = -1;
+        int min_key = avl_set.Minimum(key, &min_depth);
 
         std::cout << min_key << " " << min_depth << "\n";
       } else if (command == "Maximum") {
         int key;
         std::cin >> key;
 
-        int max_key;
-        int max_depth = avl_set.Maximum(key, &max_key);
+        int max_depth = -1;
+        int max_key = avl_set.Maximum(key, &max_depth);
 
         std::cout << max_key << " " << max_depth << "\n";
       } else if (command == "Rank") {
         int key;
         std::cin >> key;
 
-        int rank;
-        int depth = avl_set.Rank(key, &rank);
+        int depth = -1;
+        int rank = avl_set.Rank(key, &depth);
 
         if (depth == -1) {
           std::cout << "-1\n";
