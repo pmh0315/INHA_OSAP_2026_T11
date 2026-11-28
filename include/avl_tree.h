@@ -22,7 +22,7 @@
 //
 // Author: 마승우, 박민혁
 // GitHubId: Zutomaro1411, choco103-dev
-// Date: 2026-11-28
+// Date: 2026-10-30
 
 #ifndef AVLSET_INCLUDE_AVL_TREE_H_
 #define AVLSET_INCLUDE_AVL_TREE_H_
