@@ -26,8 +26,7 @@
 #include <iostream>
 #include <string>
 
-#include "node.h"
-#include "avl_set.h"
+#include "include/avl_set.h"
 
 int main() {
   std::ios_base::sync_with_stdio(false);
