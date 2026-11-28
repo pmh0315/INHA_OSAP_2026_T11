@@ -25,8 +25,6 @@
 
 #include "include/node.h"
 
-using namespace std;
-
 Node::Node(int key)
     : key_(key),
       height_(1),
